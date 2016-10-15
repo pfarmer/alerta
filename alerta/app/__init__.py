@@ -77,7 +77,10 @@ if app.debug:
 if app.config['LOG_FILE']:
     from logging.handlers import RotatingFileHandler
     del app.logger.handlers[:]
-    logfile_handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=100000, backupCount=2)
+    maxBytes = 100000
+    if app.config['LOG_MAX_SIZE']:
+        maxBytes = app.config['LOG_MAX_SIZE']
+    logfile_handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=maxBytes, backupCount=2)
     logfile_handler.setLevel(logging.DEBUG)
     logfile_handler.setFormatter(logging.Formatter(LOG_FORMAT))
     for logger in loggers:
